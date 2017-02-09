@@ -142,7 +142,27 @@ $(document).ready(function(){
 
 // view products on load of the page
 $('#loader-image').show();
-showProducts();
+showProducts(1);
+
+// used when clicking the pagination buttons
+$(document).on("click", ".paging-btn", function(){
+     
+    // show loader image
+    $("#loader-image").show();
+         
+    // page type
+    var page_type = $("#page-type").val();
+     
+    // get the page number
+    var page = $(this).attr('page-num');
+     
+    // set the page number
+    $("#page-number").val(page);    
+     
+    // read products
+    showProducts(page);
+ 
+});
 
 // clicking the 'read products' button
 $('#read-products').click(function(){
@@ -157,25 +177,26 @@ $('#read-products').click(function(){
     $('#read-products').hide();
 
     // show products
-    showProducts();
+    showProducts(1);
 });
 
 // read products
-function showProducts(){
-
+function showProducts(page){
+ 
     // change page title
     changePageTitle('Read Products');
-
+ 
     // fade out effect first
     $('#page-content').fadeOut('slow', function(){
-        $('#page-content').load('read.php', function(){
+        $('#page-content').load('read.php?page=' + page, function(){
             // hide loader image
             $('#loader-image').hide();
-
+ 
             // fade in effect
             $('#page-content').fadeIn('slow');
         });
-    });
+ 
+   });
 }
 
 // will run if create product form was submitted
@@ -195,7 +216,7 @@ $(document).on('submit', '#create-product-form', function() {
             $('#read-products').hide();
 
             // 'data' is the text returned, you can do any conditions based on that
-            showProducts();
+            showProducts(1);
         });
 
     return false;
@@ -247,7 +268,7 @@ $(document).on('submit', '#update-product-form', function() {
             $('#read-products').hide();
          
             // 'data' is the text returned, you can do any conditions based on that
-            showProducts();
+            showProducts(1);
         });
              
     return false;
@@ -269,7 +290,7 @@ $(document).on('click', '.delete-btn', function(){
                 $('#loader-image').show();
                  
                 // reload the product list
-                showProducts();
+                showProducts(1);
                  
             });
     }

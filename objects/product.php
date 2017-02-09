@@ -50,7 +50,7 @@ class Product{
     }
 
     // read products
-    function readAll(){
+    public function readAll($from_record_num, $records_per_page){
 
         // select all query
         $query = "SELECT
@@ -58,10 +58,16 @@ class Product{
                 FROM
                     " . $this->table_name . "
                 ORDER BY
-                    id DESC";
+                    id DESC
+                LIMIT
+                    ?, ?";
 
         // prepare query statement
-        $stmt = $this->conn->prepare( $query );
+        $stmt = $this->conn->prepare($query);
+
+        // bind variable values
+        $stmt->bindParam(1, $from_record_num, PDO::PARAM_INT);
+        $stmt->bindParam(2, $records_per_page, PDO::PARAM_INT);
 
         // execute query
         $stmt->execute();
@@ -154,4 +160,15 @@ class Product{
             return false;
         }
     }
+    
+    // used for paging products
+    public function countAll(){
+        $query = "SELECT COUNT(*) as total_rows FROM " . $this->table_name . "";
+     
+        $stmt = $this->conn->prepare( $query );
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+     
+        return $row['total_rows'];
+    }    
 }

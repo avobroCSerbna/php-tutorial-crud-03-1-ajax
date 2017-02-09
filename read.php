@@ -1,4 +1,6 @@
 <?php
+include_once 'config/core.php';
+
 // include database and object files
 include_once 'config/database.php';
 include_once 'objects/product.php';
@@ -10,8 +12,11 @@ $db = $database->getConnection();
 // initialize object
 $product = new Product($db);
  
+// count total rows
+$total_rows=$product->countAll(); 
+ 
 // query products
-$stmt = $product->readAll();
+$stmt = $product->readAll($from_record_num, $records_per_page);
 $num = $stmt->rowCount();
  
 // check if more than 0 record found
@@ -70,5 +75,6 @@ if($num>0){
 else{
     echo "<div class='alert alert-info'>No records found.</div>";
 }
- 
+
+include_once "pagination.php"; 
 ?>
